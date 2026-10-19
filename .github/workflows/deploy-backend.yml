@@ -62,4 +62,6 @@ jobs:
         run: |
           echo "Waiting for backend to start..."
           sleep 5
-          curl -k https://${{ secrets.SERVER_IP }}:8800/health || echo "Health check failed"
+          # 헬스체크 실패 시 워크플로우를 실패 처리 (최대 5회 재시도)
+          curl -fsSk --retry 5 --retry-delay 3 --retry-all-errors --max-time 10 \
+            https://${{ secrets.SERVER_IP }}:8800/health

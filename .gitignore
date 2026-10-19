@@ -32,3 +32,5 @@ node_modules/
 /frontend/logs/
 
 /.idea/
+# Claude Code MCP 설정 (DB 접속 정보 포함)
+/.mcp.json

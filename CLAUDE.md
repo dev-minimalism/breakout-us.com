@@ -39,6 +39,8 @@ python scripts/run_scanner.py --source dynamic   # Signal scan (--source fixed|d
 python scripts/run_position_manager.py           # Check/close open positions
 ```
 
+`scripts/migrate_*.py` are one-off schema/data migrations already applied in production; don't re-run them casually. `docs/reset_paper_trading.sql` wipes `positions` and `alerts` and resets ID sequences (destructive).
+
 ## Architecture
 
 ### Signal Detection Flow
@@ -102,12 +104,16 @@ Both sides log to files with KST midnight rotation, 30-day retention:
 - `DYNAMIC_WATCHLIST_PATH` - Path to dynamic watchlist JSON
 - `SCANNER_ENABLED` - Enable background scanner (default: true)
 - `SCAN_INTERVAL_SECONDS` - Scan interval (default: 1800)
+- `SCAN_DELAY_PER_STOCK` - Per-stock delay for yfinance rate limiting (default: 0.3s)
+- `SCREENING_HOUR` / `SCREENING_MINUTE` - Daily dynamic screening time in KST (default: 23:30)
 - `MIN_VOLUME_SURGE` - Volume surge threshold (default: 50.0 = +50%)
 - `MAX_BREAKOUT_PCT` - Max breakout % above resistance (default: 5.0)
 - `INITIAL_CAPITAL` - Paper trading initial capital (default: 100000)
 - `POSITION_SIZE_PCT` - Position size as **fraction** of capital (default: 0.20, not 20)
 - `STOP_LOSS_PCT` / `TAKE_PROFIT_PCT` - Exit thresholds as **fractions** (defaults: 0.08 / 0.20)
 - `MAX_HOLDING_DAYS` - Max position holding period (default: 30)
+- `MAX_POSITIONS` - Max concurrent open positions (default: 5)
+- `ALERT_COOLDOWN_DAYS` - Suppress repeat alerts for the same ticker (default: 7)
 
 ### Frontend (.env.local / .env.production)
 - `NEXT_PUBLIC_API_URL` - Backend API URL
@@ -115,8 +121,9 @@ Both sides log to files with KST midnight rotation, 30-day retention:
 ## Deployment
 
 - **Frontend**: Auto-deploys to Vercel on push to `main`
-- **Backend**: GitHub Actions (`.github/workflows/deploy-backend.yml`) deploys on changes to `backend/**` or `ecosystem.config.js`: SSH to server, `git reset --hard origin/main` in `/var/www/breakout-us.com`, pip install, `pm2 restart breakout-backend`
-- Production backend runs under PM2 (`ecosystem.config.js`) with uvicorn on **port 8800 with HTTPS** (SSL certs on server); local dev uses port 8000 plain HTTP
+- **Backend**: GitHub Actions (`.github/workflows/deploy-backend.yml`) deploys on push to `main` touching `backend/**` or `ecosystem.config.js`, or manually via `gh workflow run "Deploy Backend"` (changes to the workflow file alone don't trigger it). Steps: SSH to server, `git reset --hard origin/main` in `/var/www/breakout-us.com`, pip install, `pm2 restart breakout-backend`, then `curl -f` health check on `:8800/health` with retries; the run fails if the backend is unhealthy
+- Production backend runs under PM2 (`ecosystem.config.js`) with uvicorn on **port 8800 with HTTPS** (certs at `/var/www/breakout-us.com/ssl/`); local dev uses port 8000 plain HTTP. `ecosystem.config.js` also defines a `breakout-frontend` PM2 app, but production frontend is served by Vercel
+- `nginx.conf` is a reference config for the server (`/etc/nginx/sites-available/breakout-us`), not applied by CI
 
 Required GitHub Secrets: `SSH_PRIVATE_KEY`, `SERVER_IP`, `SERVER_USER`
 
