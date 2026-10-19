@@ -48,8 +48,9 @@ app.add_middleware(
         "http://localhost:3000",
         "http://127.0.0.1:3000",
         "https://breakout-uscom.vercel.app",
-        "https://*.vercel.app",
     ],
+    # Vercel 프리뷰 배포 (allow_origins는 와일드카드를 지원하지 않음)
+    allow_origin_regex=r"https://breakout-uscom-[a-z0-9-]+\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

@@ -13,7 +13,7 @@ from detector.breakout_detector import BreakoutDetector
 from screener.dynamic_screener import DynamicScreener
 from routers.watchlist import load_dynamic_watchlist, ONEIL_WATCHLIST
 from routers.db import get_db_connection, is_connected
-from logging_config import setup_logging
+from logging_config import setup_logging, KST
 
 from .market_status import get_market_status, format_market_status_message
 from .signal_storage import save_signal, save_position, has_recent_alert, get_today_signal_count
@@ -231,7 +231,8 @@ class BackgroundScanner:
 
         while self._running:
             try:
-                now = datetime.now()
+                # 서버 로컬 타임존과 무관하게 KST 기준으로 스케줄링
+                now = datetime.now(KST)
                 target_time = now.replace(
                     hour=SCREENING_HOUR,
                     minute=SCREENING_MINUTE,

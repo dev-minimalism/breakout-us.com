@@ -2,6 +2,8 @@
 from datetime import datetime, time as dt_time
 from typing import TypedDict
 
+from logging_config import KST
+
 
 class MarketStatus(TypedDict):
     is_open: bool
@@ -21,7 +23,8 @@ def get_market_status() -> MarketStatus:
     Returns:
         MarketStatus dict with is_open, time, weekday
     """
-    now = datetime.now()
+    # 서버 로컬 타임존과 무관하게 KST 기준으로 판단
+    now = datetime.now(KST)
     current_time = now.time()
     weekday = now.weekday()
 
