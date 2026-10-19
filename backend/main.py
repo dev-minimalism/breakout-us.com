@@ -51,7 +51,8 @@ app.add_middleware(
     ],
     # Vercel 프리뷰 배포 (allow_origins는 와일드카드를 지원하지 않음)
     allow_origin_regex=r"https://breakout-uscom-[a-z0-9-]+\.vercel\.app",
-    allow_credentials=True,
+    # 인증/쿠키를 쓰지 않는 공개 읽기 전용 API이므로 credentials 불필요
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
