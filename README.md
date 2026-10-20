@@ -1,5 +1,16 @@
 # O'Neil Breakout - US Stock Trading Signals
 
+[![Python](https://img.shields.io/badge/Python-3-3776AB?logo=python&logoColor=white)](https://www.python.org)
+[![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+[![Next.js](https://img.shields.io/badge/Next.js-16-000000?logo=nextdotjs&logoColor=white)](https://nextjs.org)
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org)
+[![yfinance](https://img.shields.io/badge/yfinance-410093)](https://pypi.org/project/yfinance/)
+[![Deploy Backend](https://img.shields.io/github/actions/workflow/status/dev-minimalism/breakout-us.com/deploy-backend.yml?label=Deploy%20Backend&logo=githubactions&logoColor=white)](https://github.com/dev-minimalism/breakout-us.com/actions/workflows/deploy-backend.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
+
 미국 주식 O'Neil 스타일 돌파매매(Pivot Breakout) 시그널을 감지하고, 시그널마다 Paper Trading 포지션을 자동으로 운용해 성과를 추적하는 대시보드입니다.
 
 **Live Demo**: https://breakout-uscom.vercel.app
